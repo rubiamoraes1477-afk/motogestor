@@ -13,52 +13,120 @@
             --dark-bg: #112240;
             --text-light: #ccd6f6;
             --text-muted: #8892b0;
+            --success-green: #28a745;
         }
 
-        body {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
             background-color: var(--navy-blue);
             color: var(--text-light);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
         .navbar {
             background-color: var(--dark-bg);
-            border-bottom: 2px solid var(--orange);
+            border-bottom: 3px solid var(--orange);
+            padding: 1rem 0;
+            flex-shrink: 0;
         }
 
         .navbar-brand {
             color: var(--orange) !important;
             font-weight: bold;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand i {
+            font-size: 2rem;
         }
 
         .nav-link {
             color: var(--text-light) !important;
-            transition: color 0.3s;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1.5rem !important;
+            border-radius: 5px;
+            margin: 0 5px;
         }
 
-        .nav-link:hover, .nav-link.active {
+        .nav-link:hover {
             color: var(--orange) !important;
+            background-color: rgba(255, 140, 0, 0.1);
+        }
+
+        .nav-link.active {
+            color: var(--navy-blue) !important;
+            background-color: var(--orange);
+        }
+
+        .container-main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem 1rem;
         }
 
         .card {
             background-color: var(--dark-bg);
-            border: 1px solid rgba(255, 140, 0, 0.2);
-            border-radius: 10px;
-            margin-bottom: 20px;
+            border: 2px solid rgba(255, 140, 0, 0.3);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
         .card-header {
-            background-color: rgba(255, 140, 0, 0.1);
-            border-bottom: 1px solid var(--orange);
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.15) 0%, rgba(255, 140, 0, 0.05) 100%);
+            border-bottom: 2px solid var(--orange);
             color: var(--orange);
             font-weight: bold;
+            font-size: 1.3rem;
+            padding: 1.5rem;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            color: var(--orange);
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .form-control, .form-select {
             background-color: var(--navy-blue);
-            border: 1px solid var(--text-muted);
+            border: 2px solid var(--text-muted);
             color: var(--text-light);
+            font-size: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control::placeholder {
+            color: var(--text-muted);
         }
 
         .form-control:focus, .form-select:focus {
@@ -66,6 +134,7 @@
             border-color: var(--orange);
             color: var(--text-light);
             box-shadow: 0 0 0 0.25rem rgba(255, 140, 0, 0.25);
+            outline: none;
         }
 
         .btn-primary {
@@ -73,17 +142,42 @@
             border-color: var(--orange);
             color: var(--navy-blue);
             font-weight: bold;
+            font-size: 1.1rem;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .btn-primary:hover {
             background-color: #e67e00;
             border-color: #e67e00;
             color: var(--navy-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 140, 0, 0.4);
+        }
+
+        .btn-success {
+            background-color: var(--success-green);
+            border-color: var(--success-green);
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #218838;
+            transform: scale(1.05);
         }
 
         .btn-outline-orange {
             color: var(--orange);
             border-color: var(--orange);
+            font-weight: bold;
         }
 
         .btn-outline-orange:hover {
@@ -91,17 +185,29 @@
             color: var(--navy-blue);
         }
 
+        .btn-sm {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+        }
+
         .table {
             color: var(--text-light);
+            margin-bottom: 0;
         }
 
         .table thead th {
             border-bottom: 2px solid var(--orange);
             color: var(--orange);
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 1rem;
+            padding: 1rem;
         }
 
-        .table tbody tr {
+        .table tbody td {
+            padding: 1rem;
             border-bottom: 1px solid rgba(255, 140, 0, 0.1);
+            vertical-align: middle;
         }
 
         .table-hover tbody tr:hover {
@@ -110,11 +216,45 @@
         }
 
         .search-bar {
-            margin-bottom: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            border: 2px solid var(--text-muted);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .input-group-text {
+            background-color: var(--dark-bg) !important;
+            border: none !important;
+            color: var(--orange) !important;
+            font-size: 1.2rem;
+        }
+
+        .input-group .form-control {
+            border: none !important;
+            font-size: 1.1rem;
         }
 
         .tab-content {
-            padding: 20px 0;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         #loading-overlay {
@@ -123,7 +263,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(10, 25, 47, 0.8);
+            background: rgba(10, 25, 47, 0.9);
             display: none;
             justify-content: center;
             align-items: center;
@@ -132,6 +272,95 @@
 
         .spinner-border {
             color: var(--orange);
+            width: 4rem;
+            height: 4rem;
+        }
+
+        .financial-summary {
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.1) 0%, rgba(255, 140, 0, 0.05) 100%);
+            border: 2px solid var(--orange);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .financial-summary h3 {
+            color: var(--orange);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .financial-summary .amount {
+            color: var(--text-light);
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        .financial-summary .amount.positive {
+            color: var(--success-green);
+        }
+
+        .financial-summary .amount.negative {
+            color: #dc3545;
+        }
+
+        .row {
+            margin-bottom: 1.5rem;
+        }
+
+        .col-md-6, .col-md-4, .col-12 {
+            margin-bottom: 1rem;
+        }
+
+        .alert {
+            border-radius: 8px;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-success {
+            background-color: rgba(40, 167, 69, 0.2);
+            border: 1px solid var(--success-green);
+            color: var(--success-green);
+        }
+
+        .alert-danger {
+            background-color: rgba(220, 53, 69, 0.2);
+            border: 1px solid #dc3545;
+            color: #dc3545;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.3rem;
+            }
+
+            .nav-link {
+                font-size: 0.9rem;
+                padding: 0.5rem 0.8rem !important;
+            }
+
+            .card-body {
+                padding: 1.5rem;
+            }
+
+            .form-label {
+                font-size: 0.95rem;
+            }
+
+            .financial-summary .amount {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
@@ -143,50 +372,90 @@
     </div>
 </div>
 
-<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-    <div class="container">
-        <a class="navbar-brand" href="#"><i class="fas fa-motorcycle me-2"></i>MotoGestor PRO</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-motorcycle"></i>
+            <span>MotoGestor PRO</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link active" href="#clientes" data-bs-toggle="tab">Clientes</a></li>
-                <li class="nav-item"><a class="nav-link" href="#servicos" data-bs-toggle="tab">Serviços</a></li>
-                <li class="nav-item"><a class="nav-link" href="#financeiro" data-bs-toggle="tab">Financeiro</a></li>
-                <li class="nav-item"><a class="nav-link" href="#lista" data-bs-toggle="tab" onclick="loadClientsList()">Lista</a></li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-tab="clientes" onclick="switchTab('clientes', event)">
+                        <i class="fas fa-users me-2"></i>Clientes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-tab="servicos" onclick="switchTab('servicos', event)">
+                        <i class="fas fa-wrench me-2"></i>Serviços
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-tab="financeiro" onclick="switchTab('financeiro', event)">
+                        <i class="fas fa-money-bill me-2"></i>Financeiro
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-tab="lista" onclick="switchTab('lista', event); loadClientsList();">
+                        <i class="fas fa-list me-2"></i>Lista
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<div class="container mt-4">
-    <div class="tab-content">
-        <!-- Aba Clientes -->
-        <div class="tab-pane fade show active" id="clientes">
+<!-- Main Container -->
+<div class="container-main">
+    <div class="container-fluid">
+
+        <!-- TAB: CLIENTES -->
+        <div id="clientes" class="tab-content active">
             <div class="card">
-                <div class="card-header">Cadastrar Novo Cliente</div>
+                <div class="card-header">
+                    <i class="fas fa-user-plus me-2"></i>Cadastrar Novo Cliente
+                </div>
                 <div class="card-body">
                     <form id="clientForm">
-                        <div class="row g-3">
+                        <div class="row">
                             <div class="col-md-6">
-                                <label class="form-label">Nome Completo</label>
-                                <input type="text" class="form-control" id="clientName" required>
+                                <div class="form-group">
+                                    <label class="form-label" for="clientName">Nome Completo</label>
+                                    <input type="text" class="form-control" id="clientName" placeholder="Ex: João da Silva" required>
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Telefone (WhatsApp)</label>
-                                <input type="tel" class="form-control" id="clientPhone" placeholder="Ex: 81988887777" required>
+                                <div class="form-group">
+                                    <label class="form-label" for="clientPhone">Telefone (WhatsApp)</label>
+                                    <input type="tel" class="form-control" id="clientPhone" placeholder="Ex: 81988887777" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="clientEmail">E-mail</label>
+                                    <input type="email" class="form-control" id="clientEmail" placeholder="Ex: joao@email.com">
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">E-mail</label>
-                                <input type="email" class="form-control" id="clientEmail">
+                                <div class="form-group">
+                                    <label class="form-label" for="clientAddress">Endereço</label>
+                                    <input type="text" class="form-control" id="clientAddress" placeholder="Ex: Rua das Flores, 123">
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Endereço</label>
-                                <input type="text" class="form-control" id="clientAddress">
-                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary w-100">Salvar Cliente</button>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-save me-2"></i>Salvar Cliente
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -194,41 +463,60 @@
             </div>
         </div>
 
-        <!-- Aba Serviços -->
-        <div class="tab-pane fade" id="servicos">
+        <!-- TAB: SERVIÇOS -->
+        <div id="servicos" class="tab-content">
             <div class="card">
-                <div class="card-header">Registrar Novo Serviço</div>
+                <div class="card-header">
+                    <i class="fas fa-tools me-2"></i>Registrar Novo Serviço
+                </div>
                 <div class="card-body">
                     <form id="serviceForm">
-                        <div class="row g-3">
+                        <div class="row">
                             <div class="col-md-6">
-                                <label class="form-label">Cliente</label>
-                                <select class="form-select" id="serviceClient" required>
-                                    <option value="">Selecione um cliente...</option>
-                                </select>
+                                <div class="form-group">
+                                    <label class="form-label" for="serviceClient">Cliente</label>
+                                    <select class="form-select" id="serviceClient" required>
+                                        <option value="">Selecione um cliente...</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Valor (R$)</label>
-                                <input type="number" step="0.01" class="form-control" id="serviceValue" required>
+                                <div class="form-group">
+                                    <label class="form-label" for="serviceModel">Modelo da Moto</label>
+                                    <input type="text" class="form-control" id="serviceModel" placeholder="Ex: Honda CG 160" required>
+                                </div>
                             </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="servicePlate">Placa</label>
+                                    <input type="text" class="form-control" id="servicePlate" placeholder="Ex: ABC-1234" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="serviceValue">Valor (R$)</label>
+                                    <input type="number" step="0.01" class="form-control" id="serviceValue" placeholder="Ex: 150,00" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-12">
-                                <label class="form-label">Descrição do Serviço</label>
-                                <textarea class="form-control" id="serviceDescription" rows="3" required></textarea>
+                                <div class="form-group">
+                                    <label class="form-label" for="serviceDescription">Descrição do Problema</label>
+                                    <textarea class="form-control" id="serviceDescription" rows="4" placeholder="Descreva o problema ou o serviço a ser realizado..." required></textarea>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Status</label>
-                                <select class="form-select" id="serviceStatus">
-                                    <option value="Pendente">Pendente</option>
-                                    <option value="Em Andamento">Em Andamento</option>
-                                    <option value="Concluído">Concluído</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Observações</label>
-                                <input type="text" class="form-control" id="serviceNotes">
-                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary w-100">Registrar Serviço</button>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-check me-2"></i>Registrar Serviço
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -236,34 +524,58 @@
             </div>
         </div>
 
-        <!-- Aba Financeiro -->
-        <div class="tab-pane fade" id="financeiro">
+        <!-- TAB: FINANCEIRO -->
+        <div id="financeiro" class="tab-content">
             <div class="card">
-                <div class="card-header">Lançamento Financeiro</div>
+                <div class="card-header">
+                    <i class="fas fa-chart-line me-2"></i>Controle Financeiro
+                </div>
                 <div class="card-body">
+                    <div class="financial-summary">
+                        <h3>Total do Dia</h3>
+                        <div class="amount positive" id="dailyTotal">R$ 0,00</div>
+                        <p style="color: var(--text-muted); margin: 0;">Atualizando em tempo real...</p>
+                    </div>
+
                     <form id="financialForm">
-                        <div class="row g-3">
+                        <div class="row">
                             <div class="col-md-4">
-                                <label class="form-label">Tipo</label>
-                                <select class="form-select" id="finType" required>
-                                    <option value="Receita">Receita</option>
-                                    <option value="Despesa">Despesa</option>
-                                </select>
+                                <div class="form-group">
+                                    <label class="form-label" for="finType">Tipo de Lançamento</label>
+                                    <select class="form-select" id="finType" required>
+                                        <option value="Receita">Receita</option>
+                                        <option value="Despesa">Despesa</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label">Valor (R$)</label>
-                                <input type="number" step="0.01" class="form-control" id="finValue" required>
+                                <div class="form-group">
+                                    <label class="form-label" for="finValue">Valor (R$)</label>
+                                    <input type="number" step="0.01" class="form-control" id="finValue" placeholder="Ex: 250,00" required>
+                                </div>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label">Categoria</label>
-                                <input type="text" class="form-control" id="finCategory" placeholder="Ex: Peças, Mão de Obra">
+                                <div class="form-group">
+                                    <label class="form-label" for="finCategory">Categoria</label>
+                                    <input type="text" class="form-control" id="finCategory" placeholder="Ex: Peças, Mão de Obra">
+                                </div>
                             </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-12">
-                                <label class="form-label">Descrição</label>
-                                <input type="text" class="form-control" id="finDescription" required>
+                                <div class="form-group">
+                                    <label class="form-label" for="finDescription">Descrição</label>
+                                    <input type="text" class="form-control" id="finDescription" placeholder="Descreva o lançamento..." required>
+                                </div>
                             </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary w-100">Salvar Lançamento</button>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-plus me-2"></i>Lançar Pagamento
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -271,17 +583,19 @@
             </div>
         </div>
 
-        <!-- Aba Lista -->
-        <div class="tab-pane fade" id="lista">
+        <!-- TAB: LISTA -->
+        <div id="lista" class="tab-content">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <span>Lista de Clientes Cadastrados</span>
-                    <button class="btn btn-sm btn-outline-orange" onclick="loadClientsList()"><i class="fas fa-sync-alt"></i> Atualizar</button>
+                    <span><i class="fas fa-address-book me-2"></i>Lista de Clientes Cadastrados</span>
+                    <button class="btn btn-sm btn-outline-orange" onclick="loadClientsList()">
+                        <i class="fas fa-sync-alt"></i> Atualizar
+                    </button>
                 </div>
                 <div class="card-body">
                     <div class="search-bar">
                         <div class="input-group">
-                            <span class="input-group-text bg-navy-blue border-muted text-orange"><i class="fas fa-search"></i></span>
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
                             <input type="text" class="form-control" id="searchClient" placeholder="Pesquisar por nome ou telefone..." onkeyup="filterClients()">
                         </div>
                     </div>
@@ -295,13 +609,19 @@
                                 </tr>
                             </thead>
                             <tbody id="clientsTableBody">
-                                <!-- Dados serão carregados aqui -->
+                                <tr>
+                                    <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                                        <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                                        Nenhum cliente cadastrado ainda. Clique na aba "Clientes" para adicionar.
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -310,12 +630,43 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbzQPzBm8FoG4J7b-j5EH9jqCamMk1_yJBVl9F8tNTvnf9if6xvj2vTiRC6HM5WYlfVFpQ/exec';
     let allClients = [];
 
-    // Mostrar/Ocultar Loading
+    // ============================================
+    // FUNÇÕES DE NAVEGAÇÃO ENTRE ABAS
+    // ============================================
+    function switchTab(tabName, event) {
+        event.preventDefault();
+        
+        // Remover classe 'active' de todas as abas
+        const allTabs = document.querySelectorAll('.tab-content');
+        allTabs.forEach(tab => tab.classList.remove('active'));
+        
+        // Remover classe 'active' de todos os links de navegação
+        const allNavLinks = document.querySelectorAll('.nav-link');
+        allNavLinks.forEach(link => link.classList.remove('active'));
+        
+        // Adicionar classe 'active' à aba selecionada
+        const selectedTab = document.getElementById(tabName);
+        if (selectedTab) {
+            selectedTab.classList.add('active');
+        }
+        
+        // Adicionar classe 'active' ao link de navegação
+        const activeLink = document.querySelector(`[data-tab="${tabName}"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+    }
+
+    // ============================================
+    // FUNÇÕES DE LOADING
+    // ============================================
     function toggleLoading(show) {
         document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
     }
 
-    // Enviar dados para a API
+    // ============================================
+    // FUNÇÕES DE COMUNICAÇÃO COM API
+    // ============================================
     async function postData(action, data) {
         toggleLoading(true);
         try {
@@ -329,12 +680,11 @@
         } catch (error) {
             console.error('Erro:', error);
             toggleLoading(false);
-            alert('Erro ao salvar dados. Verifique sua conexão.');
+            showAlert('Erro ao salvar dados. Verifique sua conexão.', 'danger');
             return { status: 'error' };
         }
     }
 
-    // Buscar dados da API
     async function getData(action) {
         toggleLoading(true);
         try {
@@ -345,11 +695,30 @@
         } catch (error) {
             console.error('Erro:', error);
             toggleLoading(false);
+            showAlert('Erro ao carregar dados. Verifique sua conexão.', 'danger');
             return { status: 'error', data: [] };
         }
     }
 
-    // Cadastro de Cliente
+    // ============================================
+    // FUNÇÕES DE ALERTA
+    // ============================================
+    function showAlert(message, type = 'success') {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type}`;
+        alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>${message}`;
+        
+        const container = document.querySelector('.container-main');
+        container.insertBefore(alertDiv, container.firstChild);
+        
+        setTimeout(() => {
+            alertDiv.remove();
+        }, 4000);
+    }
+
+    // ============================================
+    // CADASTRO DE CLIENTE
+    // ============================================
     document.getElementById('clientForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const clientData = {
@@ -361,38 +730,52 @@
 
         const result = await postData('addClient', clientData);
         if (result.status === 'success') {
-            alert('Cliente cadastrado com sucesso!');
-            const msg = encodeURIComponent(`Olá ${clientData.Nome}, seu cadastro na MotoGestor PRO foi realizado com sucesso!`);
+            showAlert('✓ Cliente cadastrado com sucesso!', 'success');
+            const msg = encodeURIComponent(`Olá ${clientData.Nome}, seu cadastro na MotoGestor PRO foi realizado com sucesso! Estamos à sua disposição.`);
             window.open(`https://wa.me/55${clientData.Telefone.replace(/\D/g, '')}?text=${msg}`, '_blank');
             document.getElementById('clientForm').reset();
             updateClientSelects();
+            loadClientsList();
+        } else {
+            showAlert('Erro ao cadastrar cliente. Tente novamente.', 'danger');
         }
     });
 
-    // Registro de Serviço
+    // ============================================
+    // REGISTRO DE SERVIÇO
+    // ============================================
     document.getElementById('serviceForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const serviceData = {
             IDCliente: document.getElementById('serviceClient').value,
-            Valor: document.getElementById('serviceValue').value,
             Descricao: document.getElementById('serviceDescription').value,
-            Status: document.getElementById('serviceStatus').value,
-            Observacoes: document.getElementById('serviceNotes').value
+            Valor: document.getElementById('serviceValue').value,
+            Status: 'Pendente',
+            Observacoes: `Modelo: ${document.getElementById('serviceModel').value} | Placa: ${document.getElementById('servicePlate').value}`
         };
+
+        if (!serviceData.IDCliente) {
+            showAlert('Selecione um cliente antes de registrar o serviço.', 'danger');
+            return;
+        }
 
         const result = await postData('addService', serviceData);
         if (result.status === 'success') {
-            alert('Serviço registrado com sucesso!');
+            showAlert('✓ Serviço registrado com sucesso!', 'success');
             const client = allClients.find(c => c.ID === serviceData.IDCliente);
             if (client) {
-                const msg = encodeURIComponent(`Olá ${client.Nome}, o serviço "${serviceData.Descricao}" foi registrado na MotoGestor PRO. Status: ${serviceData.Status}. Valor: R$ ${serviceData.Valor}`);
+                const msg = encodeURIComponent(`Olá ${client.Nome}, o serviço "${document.getElementById('serviceModel').value} (${document.getElementById('servicePlate').value})" foi registrado na MotoGestor PRO. Valor: R$ ${serviceData.Valor}. Entraremos em contato em breve!`);
                 window.open(`https://wa.me/55${client.Telefone.replace(/\D/g, '')}?text=${msg}`, '_blank');
             }
             document.getElementById('serviceForm').reset();
+        } else {
+            showAlert('Erro ao registrar serviço. Tente novamente.', 'danger');
         }
     });
 
-    // Lançamento Financeiro
+    // ============================================
+    // LANÇAMENTO FINANCEIRO
+    // ============================================
     document.getElementById('financialForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const finData = {
@@ -404,12 +787,17 @@
 
         const result = await postData('addFinancial', finData);
         if (result.status === 'success') {
-            alert('Lançamento financeiro salvo!');
+            showAlert('✓ Lançamento financeiro salvo com sucesso!', 'success');
             document.getElementById('financialForm').reset();
+            updateDailyTotal();
+        } else {
+            showAlert('Erro ao salvar lançamento. Tente novamente.', 'danger');
         }
     });
 
-    // Carregar Lista de Clientes
+    // ============================================
+    // LISTA DE CLIENTES
+    // ============================================
     async function loadClientsList() {
         const result = await getData('getClients');
         if (result.status === 'success') {
@@ -419,25 +807,42 @@
         }
     }
 
-    // Renderizar Tabela de Clientes
     function renderClientsTable(clients) {
         const tbody = document.getElementById('clientsTableBody');
         tbody.innerHTML = '';
+        
+        if (clients.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                        <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                        Nenhum cliente encontrado.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
         clients.forEach(client => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${client.Nome}</td>
+                <td><strong>${client.Nome}</strong></td>
                 <td>${client.Telefone}</td>
                 <td>
-                    <button class="btn btn-sm btn-success me-1" onclick="contactWhatsApp('${client.Telefone}', '${client.Nome}')"><i class="fab fa-whatsapp"></i></button>
-                    <a href="tel:${client.Telefone.replace(/\D/g, '')}" class="btn btn-sm btn-primary"><i class="fas fa-phone"></i></a>
+                    <div class="action-buttons">
+                        <button class="btn btn-sm btn-success" onclick="contactWhatsApp('${client.Telefone}', '${client.Nome}')">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </button>
+                        <a href="tel:${client.Telefone.replace(/\D/g, '')}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-phone"></i> Ligar
+                        </a>
+                    </div>
                 </td>
             `;
             tbody.appendChild(tr);
         });
     }
 
-    // Filtrar Clientes na Barra de Pesquisa
     function filterClients() {
         const searchTerm = document.getElementById('searchClient').value.toLowerCase();
         const filtered = allClients.filter(client => 
@@ -447,7 +852,6 @@
         renderClientsTable(filtered);
     }
 
-    // Atualizar Selects de Clientes
     function updateClientSelects() {
         const select = document.getElementById('serviceClient');
         const currentValue = select.value;
@@ -461,16 +865,44 @@
         select.value = currentValue;
     }
 
-    // Função para Chamar no WhatsApp
     function contactWhatsApp(phone, name) {
-        const msg = encodeURIComponent(`Olá ${name}, tudo bem? Aqui é da MotoGestor PRO.`);
+        const msg = encodeURIComponent(`Olá ${name}, tudo bem? Aqui é da MotoGestor PRO. Como posso ajudá-lo?`);
         window.open(`https://wa.me/55${phone.replace(/\D/g, '')}?text=${msg}`, '_blank');
     }
 
-    // Inicialização
-    window.onload = () => {
+    // ============================================
+    // RESUMO FINANCEIRO
+    // ============================================
+    async function updateDailyTotal() {
+        const result = await getData('getFinancial');
+        if (result.status === 'success') {
+            const today = new Date().toLocaleDateString('pt-BR');
+            let total = 0;
+            
+            result.data.forEach(transaction => {
+                if (transaction.Data === today) {
+                    const value = parseFloat(transaction.Valor) || 0;
+                    if (transaction.Tipo === 'Receita') {
+                        total += value;
+                    } else if (transaction.Tipo === 'Despesa') {
+                        total -= value;
+                    }
+                }
+            });
+            
+            const totalElement = document.getElementById('dailyTotal');
+            totalElement.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            totalElement.className = `amount ${total >= 0 ? 'positive' : 'negative'}`;
+        }
+    }
+
+    // ============================================
+    // INICIALIZAÇÃO
+    // ============================================
+    window.addEventListener('load', () => {
         loadClientsList();
-    };
+        updateDailyTotal();
+    });
 </script>
 
 </body>
