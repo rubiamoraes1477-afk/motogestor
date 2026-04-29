@@ -437,6 +437,22 @@
 
     function toggleLoading(show) { document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none'; }
 
+    // Função para limpar e formatar o telefone corretamente para o WhatsApp
+    function formatPhoneForWA(phone) {
+        if (!phone) return "";
+        // Remove tudo que não for número
+        let cleaned = phone.replace(/\D/g, '');
+        // Se o número tiver 10 ou 11 dígitos (DDD + número), adiciona o 55
+        if (cleaned.length === 10 || cleaned.length === 11) {
+            return "55" + cleaned;
+        }
+        // Se já tiver o 55 no começo, retorna como está
+        if (cleaned.startsWith('55') && (cleaned.length === 12 || cleaned.length === 13)) {
+            return cleaned;
+        }
+        return cleaned;
+    }
+
     async function postData(action, data) {
         toggleLoading(true);
         try {
@@ -468,9 +484,10 @@
         const res = await postData('addClient', data);
         if(res.status === 'success') {
             alert('Cliente salvo!');
-            if (data.Telefone) {
+            const waPhone = formatPhoneForWA(data.Telefone);
+            if (waPhone) {
                 const msg = encodeURIComponent(`Olá ${data.Nome}, seu cadastro na MotoGestor PRO foi concluído!`);
-                window.open(`https://wa.me/55${data.Telefone.replace(/\D/g,'')}?text=${msg}`, '_blank');
+                window.open(`https://wa.me/${waPhone}?text=${msg}`, '_blank');
             }
             document.getElementById('clientForm').reset();
             loadClientsList();
@@ -491,9 +508,10 @@
         if(res.status === 'success') {
             alert('Serviço registrado!');
             const client = allClients.find(c => c.ID === clientID);
-            if(client && client.Telefone) {
+            const waPhone = client ? formatPhoneForWA(client.Telefone) : "";
+            if(waPhone) {
                 const msg = encodeURIComponent(`Olá ${client.Nome}, registramos o serviço para sua moto ${document.getElementById('serviceModel').value}. Valor: R$ ${data.Valor}.`);
-                window.open(`https://wa.me/55${client.Telefone.replace(/\D/g,'')}?text=${msg}`, '_blank');
+                window.open(`https://wa.me/${waPhone}?text=${msg}`, '_blank');
             }
             document.getElementById('serviceForm').reset();
         }
@@ -534,7 +552,6 @@
         }
 
         container.innerHTML = clients.map(c => {
-            // Busca o último serviço deste cliente
             const clientServices = allServices.filter(s => s.IDCliente == c.ID);
             const lastService = clientServices.length > 0 ? clientServices[clientServices.length - 1] : null;
             
@@ -551,8 +568,8 @@
                     </div>
                 `;
 
-                // Lógica do Botão de Aviso WhatsApp
-                if (c.Telefone && c.Telefone.trim() !== "") {
+                const waPhone = formatPhoneForWA(c.Telefone);
+                if (waPhone) {
                     waAvisoBtn = `
                         <button class="btn btn-whatsapp-big" onclick="sendServiceNotice('${c.Telefone}', '${c.Nome}', '${lastService.Observacoes}', '${lastService.Status}')">
                             <i class="fab fa-whatsapp"></i> ENVIAR AVISO WHATSAPP
@@ -570,7 +587,7 @@
             return `
                 <div class="card mb-3" style="border-width: 1px;">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start">
+                        <div class="d-flex justify-content-between align-start">
                             <div>
                                 <h5 class="mb-0 text-orange">${c.Nome}</h5>
                                 <small class="text-muted">${c.Telefone || 'Sem telefone'}</small>
@@ -599,14 +616,16 @@
     }
 
     function contactWA(p, n) {
-        if (!p) return alert('Telefone não cadastrado!');
-        window.open(`https://wa.me/55${p.replace(/\D/g,'')}?text=${encodeURIComponent('Olá '+n+', tudo bem?')}`, '_blank');
+        const waPhone = formatPhoneForWA(p);
+        if (!waPhone) return alert('Telefone não cadastrado ou inválido!');
+        window.open(`https://wa.me/${waPhone}?text=${encodeURIComponent('Olá '+n+', tudo bem?')}`, '_blank');
     }
 
     function sendServiceNotice(phone, name, details, status) {
-        if (!phone) return alert('Telefone não cadastrado!');
+        const waPhone = formatPhoneForWA(phone);
+        if (!waPhone) return alert('Telefone não cadastrado ou inválido!');
         const msg = `Olá *${name}*! 🛠️\n\nPassando para informar sobre o serviço da sua moto:\n\n📍 *Detalhes:* ${details}\n📊 *Status Atual:* ${status}\n\nQualquer dúvida, estamos à disposição! 🏍️💨`;
-        window.open(`https://wa.me/55${phone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`, '_blank');
+        window.open(`https://wa.me/${waPhone}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
     async function updateDailyTotal() {
