@@ -21,7 +21,8 @@
             --dark-bg: #112240;
             --text-light: #ccd6f6;
             --text-muted: #8892b0;
-            --success-green: #28a745;
+            --success-green: #25D366; /* Verde oficial do WhatsApp */
+            --success-dark: #128C7E;
         }
 
         * {
@@ -172,11 +173,41 @@
             box-shadow: 0 4px 12px rgba(255, 140, 0, 0.4);
         }
 
-        .btn-success {
+        /* Botão WhatsApp Grande e Verde */
+        .btn-whatsapp-big {
             background-color: var(--success-green);
-            border-color: var(--success-green);
+            border: none;
             color: white;
             font-weight: bold;
+            font-size: 1rem;
+            padding: 12px;
+            border-radius: 10px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-whatsapp-big:hover {
+            background-color: var(--success-dark);
+            transform: scale(1.02);
+            color: white;
+        }
+
+        .btn-whatsapp-disabled {
+            background-color: #555;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .btn-whatsapp-disabled:hover {
+            background-color: #555;
+            transform: none;
         }
 
         .table {
@@ -193,6 +224,7 @@
         .table tbody td {
             border-bottom: 1px solid rgba(255, 140, 0, 0.1);
             vertical-align: middle;
+            padding: 15px 10px;
         }
 
         .tab-content {
@@ -231,7 +263,7 @@
 
         .financial-summary h3 { color: var(--orange); font-size: 1rem; text-transform: uppercase; margin-bottom: 0.5rem; }
         .financial-summary .amount { font-size: 2rem; font-weight: bold; }
-        .financial-summary .amount.positive { color: var(--success-green); }
+        .financial-summary .amount.positive { color: #28a745; }
 
         @media (max-width: 768px) {
             .navbar-brand span { font-size: 1.1rem; }
@@ -371,7 +403,7 @@
         <div id="lista" class="tab-content">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <span><i class="fas fa-list me-2"></i>LISTA DE CLIENTES</span>
+                    <span><i class="fas fa-list me-2"></i>LISTA DE CLIENTES E SERVIÇOS</span>
                     <button class="btn btn-sm btn-outline-orange" onclick="loadClientsList()"><i class="fas fa-sync-alt"></i></button>
                 </div>
                 <div class="card-body">
@@ -379,18 +411,8 @@
                         <span class="input-group-text bg-dark border-secondary text-orange"><i class="fas fa-search"></i></span>
                         <input type="text" class="form-control" id="searchClient" placeholder="Buscar por nome ou telefone..." onkeyup="filterClients()">
                     </div>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>NOME</th>
-                                    <th>AÇÕES</th>
-                                </tr>
-                            </thead>
-                            <tbody id="clientsTableBody">
-                                <!-- Dados via JS -->
-                            </tbody>
-                        </table>
+                    <div id="clientsListContainer">
+                        <!-- Dados via JS -->
                     </div>
                 </div>
             </div>
@@ -403,6 +425,7 @@
 <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzQPzBm8FoG4J7b-j5EH9jqCamMk1_yJBVl9F8tNTvnf9if6xvj2vTiRC6HM5WYlfVFpQ/exec';
     let allClients = [];
+    let allServices = [];
 
     function switchTab(tabName, event) {
         if(event) event.preventDefault();
@@ -445,8 +468,10 @@
         const res = await postData('addClient', data);
         if(res.status === 'success') {
             alert('Cliente salvo!');
-            const msg = encodeURIComponent(`Olá ${data.Nome}, seu cadastro na MotoGestor PRO foi concluído!`);
-            window.open(`https://wa.me/55${data.Telefone.replace(/\D/g,'')}?text=${msg}`, '_blank');
+            if (data.Telefone) {
+                const msg = encodeURIComponent(`Olá ${data.Nome}, seu cadastro na MotoGestor PRO foi concluído!`);
+                window.open(`https://wa.me/55${data.Telefone.replace(/\D/g,'')}?text=${msg}`, '_blank');
+            }
             document.getElementById('clientForm').reset();
             loadClientsList();
         }
@@ -466,7 +491,7 @@
         if(res.status === 'success') {
             alert('Serviço registrado!');
             const client = allClients.find(c => c.ID === clientID);
-            if(client) {
+            if(client && client.Telefone) {
                 const msg = encodeURIComponent(`Olá ${client.Nome}, registramos o serviço para sua moto ${document.getElementById('serviceModel').value}. Valor: R$ ${data.Valor}.`);
                 window.open(`https://wa.me/55${client.Telefone.replace(/\D/g,'')}?text=${msg}`, '_blank');
             }
@@ -490,30 +515,82 @@
     });
 
     async function loadClientsList() {
-        const res = await getData('getClients');
-        if(res.status === 'success') {
-            allClients = res.data;
-            renderTable(allClients);
+        const resClients = await getData('getClients');
+        const resServices = await getData('getServices');
+        
+        if(resClients.status === 'success') {
+            allClients = resClients.data;
+            allServices = resServices.status === 'success' ? resServices.data : [];
+            renderList(allClients);
             updateSelects();
         }
     }
 
-    function renderTable(clients) {
-        const tbody = document.getElementById('clientsTableBody');
-        tbody.innerHTML = clients.map(c => `
-            <tr>
-                <td><strong>${c.Nome}</strong><br><small class="text-muted">${c.Telefone}</small></td>
-                <td>
-                    <button class="btn btn-sm btn-success mb-1" onclick="contactWA('${c.Telefone}', '${c.Nome}')"><i class="fab fa-whatsapp"></i></button>
-                    <a href="tel:${c.Telefone.replace(/\D/g,'')}" class="btn btn-sm btn-primary mb-1"><i class="fas fa-phone"></i></a>
-                </td>
-            </tr>
-        `).join('');
+    function renderList(clients) {
+        const container = document.getElementById('clientsListContainer');
+        if (clients.length === 0) {
+            container.innerHTML = '<p class="text-center text-muted">Nenhum cliente encontrado.</p>';
+            return;
+        }
+
+        container.innerHTML = clients.map(c => {
+            // Busca o último serviço deste cliente
+            const clientServices = allServices.filter(s => s.IDCliente == c.ID);
+            const lastService = clientServices.length > 0 ? clientServices[clientServices.length - 1] : null;
+            
+            let serviceInfo = '<span class="text-muted">Nenhum serviço registrado</span>';
+            let waAvisoBtn = '';
+
+            if (lastService) {
+                serviceInfo = `
+                    <div class="mt-2 p-2 rounded" style="background: rgba(255,255,255,0.05); border-left: 3px solid var(--orange);">
+                        <small class="d-block text-orange">ÚLTIMO SERVIÇO:</small>
+                        <strong>${lastService.Observacoes || 'Moto não informada'}</strong><br>
+                        <small>${lastService.Descricao}</small><br>
+                        <span class="badge bg-warning text-dark mt-1">${lastService.Status}</span>
+                    </div>
+                `;
+
+                // Lógica do Botão de Aviso WhatsApp
+                if (c.Telefone && c.Telefone.trim() !== "") {
+                    waAvisoBtn = `
+                        <button class="btn btn-whatsapp-big" onclick="sendServiceNotice('${c.Telefone}', '${c.Nome}', '${lastService.Observacoes}', '${lastService.Status}')">
+                            <i class="fab fa-whatsapp"></i> ENVIAR AVISO WHATSAPP
+                        </button>
+                    `;
+                } else {
+                    waAvisoBtn = `
+                        <button class="btn btn-whatsapp-big btn-whatsapp-disabled" onclick="alert('Por favor, cadastre o número de telefone do cliente primeiro!')">
+                            <i class="fas fa-exclamation-triangle"></i> CADASTRAR TELEFONE PRIMEIRO
+                        </button>
+                    `;
+                }
+            }
+
+            return `
+                <div class="card mb-3" style="border-width: 1px;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="mb-0 text-orange">${c.Nome}</h5>
+                                <small class="text-muted">${c.Telefone || 'Sem telefone'}</small>
+                            </div>
+                            <div class="d-flex gap-2">
+                                ${c.Telefone ? `<a href="tel:${c.Telefone.replace(/\D/g,'')}" class="btn btn-sm btn-outline-light"><i class="fas fa-phone"></i></a>` : ''}
+                                ${c.Telefone ? `<button class="btn btn-sm btn-success" onclick="contactWA('${c.Telefone}', '${c.Nome}')"><i class="fab fa-whatsapp"></i></button>` : ''}
+                            </div>
+                        </div>
+                        ${serviceInfo}
+                        ${waAvisoBtn}
+                    </div>
+                </div>
+            `;
+        }).join('');
     }
 
     function filterClients() {
         const term = document.getElementById('searchClient').value.toLowerCase();
-        renderTable(allClients.filter(c => c.Nome.toLowerCase().includes(term) || c.Telefone.includes(term)));
+        renderList(allClients.filter(c => c.Nome.toLowerCase().includes(term) || (c.Telefone && c.Telefone.includes(term))));
     }
 
     function updateSelects() {
@@ -522,7 +599,14 @@
     }
 
     function contactWA(p, n) {
+        if (!p) return alert('Telefone não cadastrado!');
         window.open(`https://wa.me/55${p.replace(/\D/g,'')}?text=${encodeURIComponent('Olá '+n+', tudo bem?')}`, '_blank');
+    }
+
+    function sendServiceNotice(phone, name, details, status) {
+        if (!phone) return alert('Telefone não cadastrado!');
+        const msg = `Olá *${name}*! 🛠️\n\nPassando para informar sobre o serviço da sua moto:\n\n📍 *Detalhes:* ${details}\n📊 *Status Atual:* ${status}\n\nQualquer dúvida, estamos à disposição! 🏍️💨`;
+        window.open(`https://wa.me/55${phone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
     async function updateDailyTotal() {
