@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MotoGestor PRO - Sistema de Oficina</title>
     
+    <!-- Configuração de PWA e Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff8c00">
+    <meta name="description" content="Sistema profissional de gestão para oficina de motos">
+    
     <!-- Configuração de Ícones para Celular com Versionamento para Forçar Atualização -->
     <link rel="icon" type="image/png" href="logo.png?v=1">
     <link rel="apple-touch-icon" href="logo.png?v=1">
@@ -427,6 +432,11 @@
     let allClients = [];
     let allServices = [];
 
+    // Registrar Service Worker para PWA
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(err => console.log('Service Worker não registrado:', err));
+    }
+
     function switchTab(tabName, event) {
         if(event) event.preventDefault();
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -587,7 +597,7 @@
             return `
                 <div class="card mb-3" style="border-width: 1px;">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-start">
+                        <div class="d-flex justify-content-between align-items-start">
                             <div>
                                 <h5 class="mb-0 text-orange">${c.Nome}</h5>
                                 <small class="text-muted">${c.Telefone || 'Sem telefone'}</small>
