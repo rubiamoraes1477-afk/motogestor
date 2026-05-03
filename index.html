@@ -5,191 +5,765 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MotoGestor PRO - Sistema de Oficina</title>
     
+    <!-- Configuração de PWA e Manifest -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff8c00">
+    <meta name="description" content="Sistema profissional de gestão para oficina de motos">
     
+    <!-- Configuração de Ícones para Celular com Versionamento para Forçar Atualização -->
     <link rel="icon" type="image/png" href="logo.png?v=1">
     <link rel="apple-touch-icon" href="logo.png?v=1">
+    <meta name="apple-mobile-web-app-title" content="MotoGestor PRO">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --navy-blue: #0a192f; --orange: #ff8c00; --dark-bg: #112240; --text-light: #ccd6f6; --success-green: #25D366; }
-        html, body { height: 100%; background-color: var(--navy-blue); color: var(--text-light); font-family: sans-serif; }
-        body { display: flex; flex-direction: column; }
-        .header-logo { text-align: center; padding: 20px 0; background-color: var(--dark-bg); border-bottom: 1px solid rgba(255, 140, 0, 0.2); }
-        .header-logo img { max-width: 120px; border-radius: 10px; }
-        .navbar { background-color: var(--dark-bg); border-bottom: 3px solid var(--orange); }
-        .nav-link { color: var(--text-light) !important; font-weight: bold; }
-        .nav-link.active { color: var(--navy-blue) !important; background-color: var(--orange); border-radius: 5px; }
-        .card { background-color: var(--dark-bg); border: 1px solid var(--orange); border-radius: 12px; margin-bottom: 1rem; }
-        .card-header { color: var(--orange); font-weight: bold; }
-        .form-label { color: var(--orange); font-weight: bold; font-size: 0.8rem; }
-        .form-control, .form-select { background-color: var(--navy-blue); border: 1px solid #333; color: white; }
-        .btn-primary { background-color: var(--orange); border: none; color: var(--navy-blue); font-weight: bold; }
-        .btn-whatsapp-big { background-color: var(--success-green); color: white; width: 100%; border-radius: 8px; padding: 10px; font-weight: bold; border: none; margin-top: 10px; }
-        .tab-content { display: none; padding: 15px; }
-        .tab-content.active { display: block; }
-        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        :root {
+            --navy-blue: #0a192f;
+            --orange: #ff8c00;
+            --dark-bg: #112240;
+            --text-light: #ccd6f6;
+            --text-muted: #8892b0;
+            --success-green: #25D366;
+            --success-dark: #128C7E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            background-color: var(--navy-blue);
+            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-logo {
+            text-align: center;
+            padding: 20px 0;
+            background-color: var(--dark-bg);
+            border-bottom: 1px solid rgba(255, 140, 0, 0.2);
+        }
+
+        .header-logo img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .navbar {
+            background-color: var(--dark-bg);
+            border-bottom: 3px solid var(--orange);
+            padding: 0.5rem 0;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand {
+            color: var(--orange) !important;
+            font-weight: bold;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-link {
+            color: var(--text-light) !important;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem !important;
+            border-radius: 5px;
+            margin: 0 2px;
+        }
+
+        .nav-link:hover {
+            color: var(--orange) !important;
+            background-color: rgba(255, 140, 0, 0.1);
+        }
+
+        .nav-link.active {
+            color: var(--navy-blue) !important;
+            background-color: var(--orange);
+        }
+
+        .container-main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem 1rem;
+        }
+
+        .card {
+            background-color: var(--dark-bg);
+            border: 2px solid rgba(255, 140, 0, 0.3);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.15) 0%, rgba(255, 140, 0, 0.05) 100%);
+            border-bottom: 2px solid var(--orange);
+            color: var(--orange);
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 1rem 1.5rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-label {
+            color: var(--orange);
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control, .form-select {
+            background-color: var(--navy-blue);
+            border: 2px solid var(--text-muted);
+            color: var(--text-light);
+            font-size: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: var(--navy-blue);
+            border-color: var(--orange);
+            color: var(--text-light);
+            box-shadow: 0 0 0 0.25rem rgba(255, 140, 0, 0.25);
+            outline: none;
+        }
+
+        .btn-primary {
+            background-color: var(--orange);
+            border-color: var(--orange);
+            color: var(--navy-blue);
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-primary:hover {
+            background-color: #e67e00;
+            border-color: #e67e00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 140, 0, 0.4);
+        }
+
+        .btn-whatsapp-big {
+            background-color: var(--success-green);
+            border: none;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 12px;
+            border-radius: 10px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-whatsapp-big:hover {
+            background-color: var(--success-dark);
+            transform: scale(1.02);
+            color: white;
+        }
+
+        .btn-whatsapp-disabled {
+            background-color: #555;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .btn-whatsapp-disabled:hover {
+            background-color: #555;
+            transform: none;
+        }
+
+        .table {
+            color: var(--text-light);
+        }
+
+        .table thead th {
+            border-bottom: 2px solid var(--orange);
+            color: var(--orange);
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .table tbody td {
+            border-bottom: 1px solid rgba(255, 140, 0, 0.1);
+            vertical-align: middle;
+            padding: 15px 10px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #loading-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 25, 47, 0.9);
+            display: none;
+            justify-content: center; align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner-border { 
+            color: var(--orange); 
+            width: 3rem; 
+            height: 3rem; 
+        }
+
+        .financial-summary {
+            background: rgba(255, 140, 0, 0.1);
+            border: 2px solid var(--orange);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .financial-summary h3 { 
+            color: var(--orange); 
+            font-size: 1rem; 
+            text-transform: uppercase; 
+            margin-bottom: 0.5rem; 
+        }
+        
+        .financial-summary .amount { 
+            font-size: 2rem; 
+            font-weight: bold; 
+        }
+        
+        .financial-summary .amount.positive { 
+            color: #28a745; 
+        }
+
+        @media (max-width: 768px) {
+            .navbar-brand span { font-size: 1.1rem; }
+            .nav-link { font-size: 0.85rem; padding: 0.5rem 0.5rem !important; }
+        }
     </style>
 </head>
 <body>
 
-<div id="loading-overlay"><div class="spinner-border text-warning"></div></div>
+<div id="loading-overlay">
+    <div class="spinner-border" role="status"></div>
+</div>
 
-<div class="header-logo"><img src="logo.png?v=1"></div>
+<!-- Logo no Topo -->
+<div class="header-logo">
+    <img src="logo.png?v=1" alt="MotoGestor PRO Logo">
+</div>
 
-<nav class="navbar navbar-expand navbar-dark sticky-top">
-    <div class="container-fluid">
-        <ul class="navbar-nav w-100 justify-content-around">
-            <li class="nav-item"><a class="nav-link active" href="#" onclick="switchTab('clientes', event)">CLIENTES</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" onclick="switchTab('servicos', event)">SERVIÇOS</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" onclick="switchTab('lista', event)">LISTA</a></li>
-        </ul>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container-fluid px-3">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-motorcycle"></i>
+            <span>MotoGestor PRO</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link active" href="#" data-tab="clientes" onclick="switchTab('clientes', event)">CLIENTES</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" data-tab="servicos" onclick="switchTab('servicos', event)">SERVIÇOS</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" data-tab="financeiro" onclick="switchTab('financeiro', event)">FINANCEIRO</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" data-tab="lista" onclick="switchTab('lista', event); loadClientsList();">LISTA</a></li>
+            </ul>
+        </div>
     </div>
 </nav>
 
 <div class="container-main">
-    <div id="clientes" class="tab-content active">
-        <div class="card">
-            <div class="card-header">NOVO CLIENTE</div>
-            <div class="card-body">
-                <form id="clientForm">
-                    <label class="form-label">NOME COMPLETO</label>
-                    <input type="text" class="form-control mb-2" id="Nome_Completo" required>
-                    <label class="form-label">WHATSAPP (DDD + NÚMERO)</label>
-                    <input type="tel" class="form-control mb-2" id="WhatsApp_DDD" placeholder="Ex: 81988887777" required>
-                    <label class="form-label">CIDADE</label>
-                    <input type="text" class="form-control mb-2" id="Cidade">
-                    <label class="form-label">ENDEREÇO</label>
-                    <input type="text" class="form-control mb-3" id="Endereço">
-                    <button type="submit" class="btn btn-primary w-100">SALVAR CLIENTE</button>
-                </form>
+    <div class="container-fluid">
+
+        <!-- TAB: CLIENTES -->
+        <div id="clientes" class="tab-content active">
+            <div class="card">
+                <div class="card-header"><i class="fas fa-user-plus me-2"></i>CADASTRAR CLIENTE</div>
+                <div class="card-body">
+                    <form id="clientForm">
+                        <div class="form-group">
+                            <label class="form-label">NOME COMPLETO</label>
+                            <input type="text" class="form-control" id="clientName" placeholder="Digite o nome do cliente" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">WHATSAPP (COM DDD)</label>
+                            <input type="tel" class="form-control" id="clientPhone" placeholder="Ex: 81988887777" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">CIDADE</label>
+                            <input type="text" class="form-control" id="clientCity" placeholder="Ex: Recife">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">ENDEREÇO</label>
+                            <input type="text" class="form-control" id="clientAddress" placeholder="Rua, Número, Bairro">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100"><i class="fas fa-save me-2"></i>SALVAR CLIENTE</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div id="servicos" class="tab-content">
-        <div class="card">
-            <div class="card-header">REGISTRAR SERVIÇO</div>
-            <div class="card-body">
-                <form id="serviceForm">
-                    <label class="form-label">CLIENTE</label>
-                    <select class="form-select mb-2" id="ID_Cliente" required><option value="">Carregando...</option></select>
-                    <label class="form-label">PLACA DA MOTO</label>
-                    <input type="text" class="form-control mb-2" id="Placa_Veiculo" required>
-                    <label class="form-label">MODELO / ANO</label>
-                    <input type="text" class="form-control mb-2" id="Modelo_Ano" required>
-                    <label class="form-label">PROBLEMA / SERVIÇO</label>
-                    <textarea class="form-control mb-2" id="Problema_Relatado" required></textarea>
-                    <label class="form-label">VALOR (R$)</label>
-                    <input type="number" step="0.01" class="form-control mb-3" id="Valor_Total" required>
-                    <button type="submit" class="btn btn-primary w-100">FINALIZAR E AVISAR</button>
-                </form>
+        <!-- TAB: SERVIÇOS -->
+        <div id="servicos" class="tab-content">
+            <div class="card">
+                <div class="card-header"><i class="fas fa-tools me-2"></i>REGISTRAR SERVIÇO</div>
+                <div class="card-body">
+                    <form id="serviceForm">
+                        <div class="form-group">
+                            <label class="form-label">SELECIONE O CLIENTE</label>
+                            <select class="form-select" id="serviceClient" required>
+                                <option value="">Carregando clientes...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">PLACA DA MOTO</label>
+                            <input type="text" class="form-control" id="servicePlate" placeholder="Ex: ABC-1234" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">MODELO E ANO DA MOTO</label>
+                            <input type="text" class="form-control" id="serviceModelYear" placeholder="Ex: Honda CG 160 2023" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">COR DA MOTO</label>
+                            <input type="text" class="form-control" id="serviceColor" placeholder="Ex: Vermelha">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">KM ATUAL</label>
+                            <input type="number" class="form-control" id="serviceKM" placeholder="Ex: 15000">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">PROBLEMA RELATADO / SERVIÇO</label>
+                            <textarea class="form-control" id="serviceDescription" rows="3" placeholder="O que precisa ser feito?" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">VALOR DO SERVIÇO (R$)</label>
+                            <input type="number" step="0.01" class="form-control" id="serviceValue" placeholder="0,00" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100"><i class="fas fa-check me-2"></i>REGISTRAR SERVIÇO</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div id="lista" class="tab-content">
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" id="searchClient" placeholder="Buscar cliente..." onkeyup="filterClients()">
+        <!-- TAB: FINANCEIRO -->
+        <div id="financeiro" class="tab-content">
+            <div class="card">
+                <div class="card-header"><i class="fas fa-cash-register me-2"></i>FINANCEIRO</div>
+                <div class="card-body">
+                    <div class="financial-summary">
+                        <h3>TOTAL RECEBIDO HOJE</h3>
+                        <div class="amount positive" id="dailyTotal">R$ 0,00</div>
+                    </div>
+                    <form id="financialForm">
+                        <div class="form-group">
+                            <label class="form-label">TIPO DE LANÇAMENTO</label>
+                            <select class="form-select" id="finType" required>
+                                <option value="Receita">RECEITA (ENTRADA)</option>
+                                <option value="Despesa">DESPESA (SAÍDA)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">VALOR (R$)</label>
+                            <input type="number" step="0.01" class="form-control" id="finValue" placeholder="0,00" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">DESCRIÇÃO</label>
+                            <input type="text" class="form-control" id="finDescription" placeholder="Ex: Pagamento troca de óleo" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100"><i class="fas fa-plus me-2"></i>LANÇAR PAGAMENTO</button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div id="clientsListContainer"></div>
+
+        <!-- TAB: LISTA -->
+        <div id="lista" class="tab-content">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-list me-2"></i>LISTA DE CLIENTES E SERVIÇOS</span>
+                    <button class="btn btn-sm btn-outline-orange" onclick="loadClientsList()"><i class="fas fa-sync-alt"></i></button>
+                </div>
+                <div class="card-body">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-dark border-secondary text-orange"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" id="searchClient" placeholder="Buscar por nome ou telefone..." onkeyup="filterClients()">
+                    </div>
+                    <div id="clientsListContainer">
+                        <!-- Dados via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxrrvKXAEN5sSZYhOpEqLdoy0i2VzfTqzsJ-MP4OA3DjJmkkrUO4CisBIxzhH--PnqmeA/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxxazsYZDebmanrFIuNOsQdVuboVVJZK2KsgKjkt6DrJbYDvJ04EgA5qLKvUdplkEMXNw/exec';
     let allClients = [];
     let allServices = [];
+    let allMotos = [];
 
-    function switchTab(tab, e) {
-        e.preventDefault();
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-        document.getElementById(tab).classList.add('active');
-        e.target.classList.add('active');
-        if(tab === 'lista') loadData();
+    // Registrar Service Worker para PWA
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(err => console.log('Service Worker não registrado:', err));
     }
 
-    async function loadData() {
-        document.getElementById('loading-overlay').style.display = 'flex';
+    function switchTab(tabName, event) {
+        if(event) event.preventDefault();
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.getElementById(tabName).classList.add('active');
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+    }
+
+    function toggleLoading(show) { 
+        document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none'; 
+    }
+
+    function formatPhoneForWA(phone) {
+        if (!phone) return "";
+        let cleaned = phone.replace(/\D/g, '');
+        if (cleaned.length === 10 || cleaned.length === 11) {
+            return "55" + cleaned;
+        }
+        if (cleaned.startsWith('55') && (cleaned.length === 12 || cleaned.length === 13)) {
+            return cleaned;
+        }
+        return cleaned;
+    }
+
+    async function postData(action, data) {
         try {
-            const rC = await fetch(`${API_URL}?action=getClients`);
-            const dC = await rC.json();
-            allClients = dC.data;
-
-            const rS = await fetch(`${API_URL}?action=getServices`);
-            const dS = await rS.json();
-            allServices = dS.data;
-
-            updateSelects();
-            renderList(allClients);
-        } finally {
-            document.getElementById('loading-overlay').style.display = 'none';
+            const response = await fetch(`${API_URL}?action=${action}`, { 
+                method: 'POST', 
+                body: JSON.stringify(data) 
+            });
+            const result = await response.json();
+            return result;
+        } catch (e) { 
+            console.error('Erro:', e);
+            return {status:'error', message: e.message}; 
         }
     }
 
-    function updateSelects() {
-        const sel = document.getElementById('ID_Cliente');
-        sel.innerHTML = '<option value="">SELECIONE</option>' + allClients.map(c => `<option value="${c.ID_Cliente}">${c.Nome_Completo}</option>`).join('');
+    async function getData(action) {
+        try {
+            const response = await fetch(`${API_URL}?action=${action}`);
+            const result = await response.json();
+            return result;
+        } catch (e) { 
+            console.error('Erro:', e);
+            return {status:'error', data:[]}; 
+        }
     }
 
+    // FORMULÁRIO DE CLIENTES
     document.getElementById('clientForm').addEventListener('submit', async (e) => {
         e.preventDefault();
+        toggleLoading(true);
+        
         const data = {
-            Nome_Completo: document.getElementById('Nome_Completo').value,
-            WhatsApp_DDD: document.getElementById('WhatsApp_DDD').value,
-            Cidade: document.getElementById('Cidade').value,
-            Endereço: document.getElementById('Endereço').value,
-            ID_Cliente: Date.now() // Gera um ID único simples
+            Nome_Completo: document.getElementById('clientName').value,
+            WhatsApp_DDD: document.getElementById('clientPhone').value,
+            Cidade: document.getElementById('clientCity').value,
+            Endereço: document.getElementById('clientAddress').value
         };
         
-        await fetch(API_URL + '?action=addClient', { method: 'POST', body: JSON.stringify(data) });
-        alert('Cliente Salvo!');
-        document.getElementById('clientForm').reset();
+        const res = await postData('addClient', data);
+        toggleLoading(false);
+        
+        if(res.status === 'success') {
+            alert('✅ Cliente salvo com sucesso!');
+            const waPhone = formatPhoneForWA(data.WhatsApp_DDD);
+            if (waPhone) {
+                const msg = encodeURIComponent(`Olá ${data.Nome_Completo}, seu cadastro na MotoGestor PRO foi concluído!`);
+                window.open(`https://wa.me/${waPhone}?text=${msg}`, '_blank');
+            }
+            document.getElementById('clientForm').reset();
+            await loadClientsList();
+        } else {
+            alert('❌ Erro ao salvar cliente: ' + (res.message || 'Erro desconhecido'));
+        }
     });
 
+    // FORMULÁRIO DE SERVIÇOS
     document.getElementById('serviceForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const data = {
-            ID_Cliente: document.getElementById('ID_Cliente').value,
-            Placa_Veiculo: document.getElementById('Placa_Veiculo').value,
-            Modelo_Ano: document.getElementById('Modelo_Ano').value,
-            Problema_Relatado: document.getElementById('Problema_Relatado').value,
-            Valor_Total: document.getElementById('Valor_Total').value,
-            Status: 'Pendente'
-        };
+        toggleLoading(true);
+        
+        const clientID = document.getElementById('serviceClient').value;
+        const client = allClients.find(c => c.ID_Cliente === clientID);
 
-        await fetch(API_URL + '?action=addService', { method: 'POST', body: JSON.stringify(data) });
+        if (!client) {
+            alert('❌ Cliente não encontrado!');
+            toggleLoading(false);
+            return;
+        }
+
+        // Dados para T_Motos
+        const motoData = {
+            Placa_Chave: document.getElementById('servicePlate').value,
+            Modelo_Ano: document.getElementById('serviceModelYear').value,
+            Cor: document.getElementById('serviceColor').value,
+            KM_Atual: document.getElementById('serviceKM').value,
+            ID_Cliente: clientID
+        };
         
-        const client = allClients.find(c => c.ID_Cliente == data.ID_Cliente);
-        const msg = encodeURIComponent(`Olá ${client.Nome_Completo}! Serviço registrado: ${data.Problema_Relatado}. Valor: R$ ${data.Valor_Total}`);
-        window.open(`https://wa.me/55${client.WhatsApp_DDD.replace(/\D/g,'')}?text=${msg}`);
+        const resMoto = await postData('addMoto', motoData);
         
-        document.getElementById('serviceForm').reset();
+        if(resMoto.status !== 'success') { 
+            alert('❌ Erro ao registrar moto!');
+            toggleLoading(false);
+            return; 
+        }
+
+        // Dados para T_OrdensServico
+        const serviceData = {
+            ID_Cliente: clientID,
+            Placa_Veiculo: document.getElementById('servicePlate').value,
+            Problema_Relatado: document.getElementById('serviceDescription').value,
+            Valor_Total: parseFloat(document.getElementById('serviceValue').value),
+            Status: 'Pendente',
+            KM_Entrada: document.getElementById('serviceKM').value
+        };
+        
+        const resService = await postData('addService', serviceData);
+        toggleLoading(false);
+        
+        if(resService.status === 'success') {
+            alert('✅ Serviço e Moto registrados com sucesso!');
+            
+            const waPhone = formatPhoneForWA(client.WhatsApp_DDD);
+            if(waPhone) {
+                const msg = encodeURIComponent(`Olá *${client.Nome_Completo}*! 🛠️\n\nRegistramos o serviço para sua moto:\n\n📍 *Modelo:* ${motoData.Modelo_Ano}\n🔑 *Placa:* ${motoData.Placa_Chave}\n⚙️ *Problema:* ${serviceData.Problema_Relatado}\n💰 *Valor:* R$ ${serviceData.Valor_Total.toFixed(2)}\n\nEstamos trabalhando! 🏍️💨`);
+                window.open(`https://wa.me/${waPhone}?text=${msg}`, '_blank');
+            }
+            
+            document.getElementById('serviceForm').reset();
+            await loadClientsList();
+        } else {
+            alert('❌ Erro ao registrar serviço: ' + (resService.message || 'Erro desconhecido'));
+        }
     });
 
-    function renderList(list) {
+    // FORMULÁRIO DE FINANCEIRO
+    document.getElementById('financialForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        toggleLoading(true);
+        
+        const data = {
+            Tipo: document.getElementById('finType').value,
+            Valor: parseFloat(document.getElementById('finValue').value),
+            Descricao: document.getElementById('finDescription').value
+        };
+        
+        const res = await postData('addFinancial', data);
+        toggleLoading(false);
+        
+        if(res.status === 'success') {
+            alert('✅ Lançamento realizado com sucesso!');
+            document.getElementById('financialForm').reset();
+            updateDailyTotal();
+        } else {
+            alert('❌ Erro ao lançar pagamento: ' + (res.message || 'Erro desconhecido'));
+        }
+    });
+
+    // CARREGAR LISTA DE CLIENTES
+    async function loadClientsList() {
+        toggleLoading(true);
+        
+        const resClients = await getData('getClients');
+        const resServices = await getData('getServices');
+        const resMotos = await getData('getMotos');
+        
+        toggleLoading(false);
+        
+        if(resClients.status === 'success') {
+            allClients = resClients.data || [];
+            allServices = resServices.status === 'success' ? (resServices.data || []) : [];
+            allMotos = resMotos.status === 'success' ? (resMotos.data || []) : [];
+            
+            renderList(allClients);
+            updateSelects();
+        } else {
+            alert('❌ Erro ao carregar clientes: ' + (resClients.message || 'Erro desconhecido'));
+        }
+    }
+
+    // RENDERIZAR LISTA DE CLIENTES
+    function renderList(clients) {
         const container = document.getElementById('clientsListContainer');
-        container.innerHTML = list.map(c => `
-            <div class="card p-3">
-                <div class="text-orange fw-bold">${c.Nome_Completo}</div>
-                <div class="small">${c.WhatsApp_DDD}</div>
-                <button class="btn-whatsapp-big" onclick="window.open('https://wa.me/55${c.WhatsApp_DDD.replace(/\D/g,'')}')">
-                    <i class="fab fa-whatsapp"></i> CONVERSAR
-                </button>
-            </div>
-        `).join('');
+        
+        if (!clients || clients.length === 0) {
+            container.innerHTML = '<p class="text-center text-muted">Nenhum cliente encontrado.</p>';
+            return;
+        }
+
+        container.innerHTML = clients.map(c => {
+            const clientServices = allServices.filter(s => s.ID_Cliente === c.ID_Cliente);
+            const lastService = clientServices.length > 0 ? clientServices[clientServices.length - 1] : null;
+            const moto = lastService ? allMotos.find(m => m.Placa_Chave === lastService.Placa_Veiculo) : null;
+
+            let serviceInfo = '<span class="text-muted">Nenhum serviço registrado</span>';
+            let waAvisoBtn = '';
+
+            if (lastService) {
+                const motoInfo = moto ? `${moto.Modelo_Ano} (${moto.Placa_Chave})` : lastService.Placa_Veiculo || 'Moto não informada';
+                
+                serviceInfo = `
+                    <div class="mt-2 p-2 rounded" style="background: rgba(255,255,255,0.05); border-left: 3px solid var(--orange);">
+                        <small class="d-block text-orange">ÚLTIMO SERVIÇO:</small>
+                        <strong>${motoInfo}</strong><br>
+                        <small>${lastService.Problema_Relatado}</small><br>
+                        <span class="badge bg-warning text-dark mt-1">${lastService.Status}</span>
+                    </div>
+                `;
+
+                const waPhone = formatPhoneForWA(c.WhatsApp_DDD);
+                if (waPhone) {
+                    waAvisoBtn = `
+                        <button class="btn btn-whatsapp-big" onclick="sendServiceNotice('${c.WhatsApp_DDD}', '${c.Nome_Completo}', '${motoInfo}', '${lastService.Status}')">
+                            <i class="fab fa-whatsapp"></i> ENVIAR AVISO WHATSAPP
+                        </button>
+                    `;
+                } else {
+                    waAvisoBtn = `
+                        <button class="btn btn-whatsapp-big btn-whatsapp-disabled" onclick="alert('Por favor, cadastre o número de telefone do cliente primeiro!')">
+                            <i class="fas fa-exclamation-triangle"></i> CADASTRAR TELEFONE PRIMEIRO
+                        </button>
+                    `;
+                }
+            }
+
+            return `
+                <div class="card mb-3" style="border-width: 1px;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="mb-0 text-orange">${c.Nome_Completo}</h5>
+                                <small class="text-muted">${c.WhatsApp_DDD || 'Sem telefone'}</small>
+                            </div>
+                            <div class="d-flex gap-2">
+                                ${c.WhatsApp_DDD ? `<a href="tel:${c.WhatsApp_DDD.replace(/\D/g,'')}" class="btn btn-sm btn-outline-light"><i class="fas fa-phone"></i></a>` : ''}
+                                ${c.WhatsApp_DDD ? `<button class="btn btn-sm btn-success" onclick="contactWA('${c.WhatsApp_DDD}', '${c.Nome_Completo}')"><i class="fab fa-whatsapp"></i></button>` : ''}
+                            </div>
+                        </div>
+                        ${serviceInfo}
+                        ${waAvisoBtn}
+                    </div>
+                </div>
+            `;
+        }).join('');
     }
 
+    // FILTRAR CLIENTES
     function filterClients() {
-        const val = document.getElementById('searchClient').value.toLowerCase();
-        renderList(allClients.filter(c => c.Nome_Completo.toLowerCase().includes(val)));
+        const term = document.getElementById('searchClient').value.toLowerCase();
+        const filtered = allClients.filter(c => 
+            c.Nome_Completo.toLowerCase().includes(term) || 
+            (c.WhatsApp_DDD && c.WhatsApp_DDD.includes(term))
+        );
+        renderList(filtered);
     }
 
-    window.onload = loadData;
+    // ATUALIZAR SELETOR DE CLIENTES NO FORMULÁRIO DE SERVIÇOS
+    function updateSelects() {
+        const s = document.getElementById('serviceClient');
+        if (allClients && allClients.length > 0) {
+            s.innerHTML = '<option value="">SELECIONE O CLIENTE</option>' + 
+                allClients.map(c => `<option value="${c.ID_Cliente}">${c.Nome_Completo}</option>`).join('');
+        } else {
+            s.innerHTML = '<option value="">Nenhum cliente cadastrado</option>';
+        }
+    }
+
+    // CONTATO VIA WHATSAPP
+    function contactWA(p, n) {
+        const waPhone = formatPhoneForWA(p);
+        if (!waPhone) return alert('❌ Telefone não cadastrado ou inválido!');
+        window.open(`https://wa.me/${waPhone}?text=${encodeURIComponent('Olá '+n+', tudo bem?')}`, '_blank');
+    }
+
+    // ENVIAR AVISO DE SERVIÇO VIA WHATSAPP
+    function sendServiceNotice(phone, name, details, status) {
+        const waPhone = formatPhoneForWA(phone);
+        if (!waPhone) return alert('❌ Telefone não cadastrado ou inválido!');
+        const msg = `Olá *${name}*! 🛠️\n\nPassando para informar sobre o serviço da sua moto:\n\n📍 *Detalhes:* ${details}\n📊 *Status Atual:* ${status}\n\nQualquer dúvida, estamos à disposição! 🏍️💨`;
+        window.open(`https://wa.me/${waPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    // ATUALIZAR TOTAL DIÁRIO
+    async function updateDailyTotal() {
+        const res = await getData('getFinancial');
+        if(res.status === 'success' && res.data) {
+            const today = new Date().toLocaleDateString('pt-BR');
+            let total = 0;
+            res.data.forEach(t => { 
+                if(t.Data_Lancamento === today && t.Tipo === 'Receita') {
+                    total += parseFloat(t.Valor) || 0;
+                }
+            });
+            document.getElementById('dailyTotal').textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
+        }
+    }
+
+    // CARREGA OS DADOS AO ABRIR A PÁGINA
+    window.addEventListener('load', async () => { 
+        await loadClientsList(); 
+        await updateDailyTotal(); 
+    });
 </script>
 </body>
 </html>
